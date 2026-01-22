@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trusta - Banking Made Simple</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white">
+    <!-- Top Banner -->
+    <div class="bg-[#1a2942] text-white py-2.5 px-4 text-center text-sm">
+        <span class="inline-flex items-center">
+            <span class="bg-[#ff5a5f] w-2 h-2 rounded-full mr-2"></span>
+            13 days left for a chance to win £10,000
+        </span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex justify-between items-center h-[72px]">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="#" class="text-[32px] font-bold text-[#ff5a5f] tracking-tight">trusta</a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 text-gray-600 hover:text-gray-900 text-[15px] font-medium">
+                            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                            </svg>
+                            <span>Links</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown -->
+                        <div class="dropdown absolute left-0 mt-3 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
+                            <div class="py-2">
+                                <a href="#about" class="block px-5 py-3 text-gray-700 hover:bg-gray-50 transition text-[15px] font-medium">About Trusta</a>
+                                <a href="#services" class="block px-5 py-3 text-gray-700 hover:bg-gray-50 transition text-[15px] font-medium">Services</a>
+                                <a href="#privacy" class="block px-5 py-3 text-gray-700 hover:bg-gray-50 transition text-[15px] font-medium">Privacy and Policy</a>
+                                <a href="#pricing" class="block px-5 py-3 text-gray-700 hover:bg-gray-50 transition text-[15px] font-medium">Pricing</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side Buttons -->
+<div class="hidden md:flex items-center space-x-3">
+    <button onclick="window.location.href='login.html'" class="flex items-center space-x-2 px-5 py-2 text-gray-700 hover:text-gray-900 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+        </svg>
+        <span class="font-medium text-[15px]"><a href="login.html">Login</a></span>
+    </button>
+
+    <button onclick="window.location.href='register.html'" class="flex items-center space-x-2 px-6 py-3 bg-[#1a2942] text-white rounded-full hover:bg-[#253852] transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+        </svg>
+        <span class="font-medium text-[15px]"><a href="register.html">Sign Up</a></span>
+    </button>
+</div>
+
+<!-- Mobile Menu Button -->
+<button id="mobileMenuBtn" class="md:hidden text-gray-700">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+</button>
+</div>
+</div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mobile-menu fixed inset-y-0 left-0 w-72 bg-white shadow-xl z-50 md:hidden">
+    <div class="p-6">
+        <button id="closeMobileMenu" class="mb-8">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+
+        <div class="space-y-5">
+            <a href="#about" class="block text-gray-700 font-medium text-base">About Trusta</a>
+            <a href="#services" class="block text-gray-700 font-medium text-base">Services</a>
+            <a href="#privacy" class="block text-gray-700 font-medium text-base">Privacy and Policy</a>
+            <a href="#pricing" class="block text-gray-700 font-medium text-base">Pricing</a>
+            <hr class="my-6 border-gray-200">
+
+            <button onclick="window.location.href='login.html'" class="flex items-center space-x-2 text-gray-700 font-medium text-base">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                </svg>
+                <span><a href="login.html">Login</a></span>
+            </button>
+
+            <button onclick="window.location.href='register.html'" class="flex items-center space-x-2 px-6 py-3 bg-[#1a2942] text-white rounded-full w-full justify-center font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                </svg>
+                <span><a href="register.html">Sign up</a></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+    <!-- Hero Slider Section -->
+    <section class="max-w-[1400px] mx-auto px-6 lg:px-12 py-8 md:py-10">
+        <div class="slider-container rounded-[32px] overflow-hidden bg-gray-100 relative shadow-sm">
+            <div id="sliderTrack" class="slider-track">
+                <!-- Slide 1 - Hand holding red card -->
+                <div class="slide">
+                    <div class="relative h-[450px] md:h-[520px] lg:h-[580px]">
+                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1600&h=900&fit=crop&q=80" alt="Hand holding Trusta card" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent">
+                            <div class="max-w-xl px-8 md:px-16 lg:px-20 h-full flex flex-col justify-center">
+                                <h1 class="hero-text text-4xl md:text-5xl lg:text-[56px] font-bold text-white mb-5 leading-tight">Trusta for all your money</h1>
+                                <p class="hero-subtext text-base md:text-lg lg:text-[18px] text-white/95 mb-7 leading-relaxed">Get clear on your spending. Unlock smarter ways to save. Invest with confidence.</p>
+                                <button class="bg-white text-gray-900 px-7 py-3.5 rounded-full font-semibold hover:bg-gray-100 transition w-fit text-[15px] shadow-lg">Open a free bank account</button>
+                            </div>
+                        </div>
+                        <!-- Trust Badges -->
+                        <div class="absolute bottom-5 right-5 flex flex-col gap-2">
+                            <div class="bg-white rounded-full px-4 py-2 shadow-lg flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-[10px] font-bold text-red-500 uppercase">Which?</div>
+                                    <div class="text-[9px] font-semibold text-gray-700">Recommended</div>
+                                    <div class="text-[8px] text-gray-600">Provider</div>
+                                </div>
+                            </div>
+                            <div class="bg-purple-600 rounded-full px-4 py-2 shadow-lg flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-[11px] font-bold text-white">FSCS</div>
+                                    <div class="text-[9px] font-semibold text-white">PROTECTED</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 - Red and white theme -->
+                <div class="slide">
+                    <div class="relative h-[450px] md:h-[520px] lg:h-[580px]">
+                        <img src="trusta card.png" alt="Red card on white" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent">
+                            <div class="max-w-xl px-8 md:px-16 lg:px-20 h-full flex flex-col justify-center">
+                                <h1 class="hero-text text-4xl md:text-5xl lg:text-[56px] font-bold text-white mb-5 leading-tight">Smart savings made simple</h1>
+                                <p class="hero-subtext text-base md:text-lg lg:text-[18px] text-white/95 mb-7 leading-relaxed">Save automatically and watch your money grow with our intelligent savings tools.</p>
+                                <button class="bg-white text-gray-900 px-7 py-3.5 rounded-full font-semibold hover:bg-gray-100 transition w-fit text-[15px] shadow-lg">Start saving today</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 - Red card focus -->
+                <div class="slide">
+                    <div class="relative h-[450px] md:h-[520px] lg:h-[580px]">
+                        <img src="https://images.unsplash.com/photo-1556742111-a301076d9d18?w=1600&h=900&fit=crop&q=80" alt="Red banking card" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent">
+                            <div class="max-w-xl px-8 md:px-16 lg:px-20 h-full flex flex-col justify-center">
+                                <h1 class="hero-text text-4xl md:text-5xl lg:text-[56px] font-bold text-white mb-5 leading-tight">Banking that goes with you</h1>
+                                <p class="hero-subtext text-base md:text-lg lg:text-[18px] text-white/95 mb-7 leading-relaxed">Access your money anywhere, anytime with instant notifications and total control.</p>
+                                <button class="bg-white text-gray-900 px-7 py-3.5 rounded-full font-semibold hover:bg-gray-100 transition w-fit text-[15px] shadow-lg">Get your card</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Controls -->
+            <div class="absolute left-6 bottom-6 flex items-center gap-3">
+                <button id="prevBtn" class="bg-black/30 hover:bg-black/50 text-white w-10 h-10 rounded-full transition backdrop-blur-sm flex items-center justify-center text-xl font-light">
+                    ←
+                </button>
+
+                <!-- Slider Dots -->
+                <div class="flex gap-1.5">
+                    <button class="slider-dot w-1.5 h-1.5 rounded-full bg-white/50 hover:bg-white transition" data-slide="0"></button>
+                    <button class="slider-dot w-1.5 h-1.5 rounded-full bg-white/50 hover:bg-white transition" data-slide="1"></button>
+                    <button class="slider-dot w-1.5 h-1.5 rounded-full bg-white/50 hover:bg-white transition" data-slide="2"></button>
+                </div>
+
+                <button id="nextBtn" class="bg-black/30 hover:bg-black/50 text-white w-10 h-10 rounded-full transition backdrop-blur-sm flex items-center justify-center text-xl font-light">
+                    →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tell me about Section -->
+    <section class="max-w-[1400px] mx-auto px-6 lg:px-12 py-12 md:py-16">
+        <div class="max-w-3xl mx-auto bg-[#f5f5f5] rounded-[32px] shadow-sm p-8 md:p-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">Tell me about...</h2>
+
+            <!-- Bank accounts -->
+            <div class="service-item border-b border-gray-300">
+                <div class="flex items-center justify-between py-5 cursor-pointer group">
+                    <span class="text-2xl md:text-3xl font-bold text-[#ff5a5f]">Bank accounts</span>
+                    <div class="service-icon opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-10 h-10 text-[#ff5a5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings -->
+            <div class="service-item border-b border-gray-300">
+                <div class="flex items-center justify-between py-5 cursor-pointer group">
+                    <span class="text-2xl md:text-3xl font-bold text-[#ff5a5f]">Savings</span>
+                    <div class="service-icon opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-10 h-10 text-[#ff5a5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investments -->
+            <div class="service-item border-b border-gray-300">
+                <div class="flex items-center justify-between py-5 cursor-pointer group" onclick="toggleDropdown('investments')">
+                    <div class="flex items-center gap-3">
+                        <span class="arrow text-2xl font-bold text-gray-900 transition-transform duration-300" id="investments-arrow">›</span>
+                        <span class="text-2xl md:text-3xl font-bold text-[#ff5a5f]">Investments</span>
+                    </div>
+                    <div class="service-icon opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-10 h-10 text-[#ff5a5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="investments-dropdown" class="dropdown-content overflow-hidden transition-all duration-300 max-h-0">
+                    <div class="bg-white rounded-2xl p-6 mb-4 mx-2">
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Grow your wealth with Trusta Investments. Access a range of investment options including stocks, bonds, and funds, all from your banking app.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong>Key features:</strong> Commission-free trading, diversified portfolios, expert guidance, and real-time market insights. Start investing with as little as £1.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credit -->
+            <div class="service-item border-b border-gray-300">
+                <div class="flex items-center justify-between py-5 cursor-pointer group" onclick="toggleDropdown('credit')">
+                    <div class="flex items-center gap-3">
+                        <span class="arrow text-2xl font-bold text-gray-900 transition-transform duration-300" id="credit-arrow">›</span>
+                        <span class="text-2xl md:text-3xl font-bold text-[#ff5a5f]">Credit</span>
+                    </div>
+                    <div class="service-icon opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-10 h-10 text-[#ff5a5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="credit-dropdown" class="dropdown-content overflow-hidden transition-all duration-300 max-h-0">
+                    <div class="bg-white rounded-2xl p-6 mb-4 mx-2">
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Build your credit score and access flexible borrowing with Trusta Credit. Get instant credit decisions and manage everything in one place.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong>Benefits:</strong> Competitive interest rates, no hidden fees, flexible repayment terms, and credit score tracking to help you improve your financial health.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Travel -->
+            <div class="service-item border-b border-gray-300">
+                <div class="flex items-center justify-between py-5 cursor-pointer group" onclick="toggleDropdown('travel')">
+                    <div class="flex items-center gap-3">
+                        <span class="arrow text-2xl font-bold text-gray-900 transition-transform duration-300" id="travel-arrow">›</span>
+                        <span class="text-2xl md:text-3xl font-bold text-[#ff5a5f]">Travel</span>
+                    </div>
+                    <div class="service-icon opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-10 h-10 text-[#ff5a5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="travel-dropdown" class="dropdown-content overflow-hidden transition-all duration-300 max-h-0">
+                    <div class="bg-white rounded-2xl p-6 mb-4 mx-2">
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Travel the world without worry. Spend abroad with no fees, get the best exchange rates, and manage multiple currencies seamlessly.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong>Travel perks:</strong> Zero foreign transaction fees, instant spending notifications, travel insurance included, and 24/7 support wherever you are.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mortgages -->
+            <div class="service-item border-b border-gray-300">
+                <div class="flex items-center justify-between py-5 cursor-pointer group" onclick="toggleDropdown('mortgages')">
+                    <div class="flex items-center gap-3">
+                        <span class="arrow text-2xl font-bold text-gray-900 transition-transform duration-300" id="mortgages-arrow">›</span>
+                        <span class="text-2xl md:text-3xl font-bold text-[#ff5a5f]">Mortgages</span>
+                    </div>
+                    <div class="service-icon opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-10 h-10 text-[#ff5a5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="mortgages-dropdown" class="dropdown-content overflow-hidden transition-all duration-300 max-h-0">
+                    <div class="bg-white rounded-2xl p-6 mb-4 mx-2">
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Make your dream home a reality with Trusta Mortgages. Get pre-approved in minutes and access competitive rates tailored to your needs.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong>Why choose us:</strong> Fast approval process, dedicated mortgage advisors, flexible terms, and tools to track your home-buying journey every step of the way.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pensions -->
+            <div class="service-item">
+                <div class="flex items-center justify-between py-5 cursor-pointer group" onclick="toggleDropdown('pensions')">
+                    <div class="flex items-center gap-3">
+                        <span class="arrow text-2xl font-bold text-gray-900 transition-transform duration-300" id="pensions-arrow">›</span>
+                        <span class="text-2xl md:text-3xl font-bold text-[#ff5a5f]">Pensions</span>
+                    </div>
+                    <div class="service-icon opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-10 h-10 text-[#ff5a5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="pensions-dropdown" class="dropdown-content overflow-hidden transition-all duration-300 max-h-0">
+                    <div class="bg-white rounded-2xl p-6 mb-4 mx-2">
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Secure your future with Trusta Pensions. Simple, transparent pension planning with expert guidance to help you retire comfortably.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong>Retirement planning:</strong> Tax-efficient savings, flexible contribution options, pension consolidation, and retirement calculators to visualize your future.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section class="max-w-[1400px] mx-auto px-6 lg:px-12 py-10 md:py-16">
+    <div class="bg-[#111d2e] rounded-[40px] p-10 md:p-16 lg:p-20 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 text-center md:text-left">
+        
+        <div class="flex-shrink-0 flex items-center justify-center w-full md:w-auto">
+            <img src="photo.png" alt="Which? Recommendation Badges" class="max-w-[280px] md:max-w-[340px] h-auto object-contain">
+        </div>
+
+        <div class="max-w-md">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
+                Which? recommended <br class="hidden lg:block"> 2 years in a row
+            </h2>
+            <p class="text-white/80 text-lg md:text-xl mb-8 font-medium">
+                Join 14 million people already banking with Trusta.
+            </p>
+            <button class="bg-white text-[#111d2e] px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-lg w-full md:w-fit">
+                Join Trusta for free
+            </button>
+        </div>
+
+    </div>
+</section>
+    
+<section class="max-w-[1400px] mx-auto px-6 lg:px-12 py-16">
+    <div class="mb-10">
+        <div class="flex flex-wrap gap-2 mb-8">
+            <button onclick="filterCards('save')" id="btn-save" class="filter-btn px-5 py-1.5 bg-[#3a444e] text-white rounded-full text-[15px] font-semibold transition">Save</button>
+            <button onclick="filterCards('invest')" id="btn-invest" class="filter-btn px-5 py-1.5 bg-[#f3f4f6] text-[#3a444e] rounded-full text-[15px] font-semibold hover:bg-gray-200 transition">Invest</button>
+            <button onclick="filterCards('retire')" id="btn-retire" class="filter-btn px-5 py-1.5 bg-[#f3f4f6] text-[#3a444e] rounded-full text-[15px] font-semibold hover:bg-gray-200 transition">Retire</button>
+        </div>
+        <h2 class="text-[32px] md:text-[48px] font-extrabold text-[#1a2942] leading-tight flex items-center gap-3">
+            Build your money for tomorrow <span class="text-red-500">🚀</span>
+        </h2>
+        <p class="text-gray-500 text-lg mt-1 font-medium">Save for the things that matter.</p>
+    </div>
+
+    <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        </div>
+</section>
+
+<section class="max-w-[1400px] mx-auto px-6 lg:px-12 py-16 md:py-24 bg-white">
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+        
+        <div class="flex-1 order-2 lg:order-1">
+            <h2 class="text-[32px] md:text-[48px] font-extrabold text-[#111d2e] leading-tight mb-6">
+                No phone? No problem.
+            </h2>
+            <p class="text-gray-500 text-lg md:text-xl mb-10 font-medium leading-relaxed max-w-xl">
+                If your phone's lost or stolen, you can log into your account on another device, like a laptop or tablet. You can freeze and unfreeze your accounts, check your transactions and balance, and remotely log out of all your devices.
+            </p>
+            <button class="bg-[#111d2e] text-white px-9 py-4 rounded-full font-bold text-[16px] hover:bg-slate-800 transition shadow-md">
+                Log in
+            </button>
+        </div>
+
+        <div class="flex-1 order-1 lg:order-2 w-full">
+            <div class="relative rounded-[40px] md:rounded-[60px] overflow-hidden bg-gradient-to-br from-[#ff3b30] to-[#ff6b6b] aspect-square md:aspect-auto md:h-[500px] flex items-center justify-center">
+                <img src="No_Phone__No_Problem_2x.png" 
+                     alt="Laptop on mosaic table" 
+                     class="w-full h-full object-cover mix-blend-normal">
+                
+                <div class="absolute inset-0 flex items-center justify-center p-8 md:p-12">
+                     </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="max-w-[1400px] mx-auto px-6 lg:px-12 py-16 bg-white overflow-hidden">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+        
+        <div class="flex-1 order-1">
+            <h2 class="text-[32px] md:text-[48px] font-extrabold text-[#111d2e] leading-tight mb-4">
+                Security you can bank on
+            </h2>
+            <p class="text-gray-500 text-lg md:text-xl mb-8 font-medium">
+                Keep your money safe with industry-first fraud protection and 24/7 support.
+            </p>
+            <button class="bg-[#111d2e] text-white px-8 py-3.5 rounded-full font-bold text-[15px] hover:bg-slate-800 transition mb-12">
+                How we protect your money
+            </button>
+
+            <div class="bg-[#f0f9f9] rounded-3xl p-6 md:p-8 flex gap-5 max-w-md shadow-sm border border-emerald-50/50">
+                <div class="flex-shrink-0">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-orange-400 flex items-center justify-center text-white text-[10px] font-bold text-center leading-tight shadow-md">
+                        Industry<br>first
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Call Status</h3>
+                    <p class="text-gray-600 text-[15px] leading-relaxed">
+                        This feature tells you if you're really speaking to Trusta, or if it could be a scammer. It helps prevent 700 fraud attempts a month.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-1 order-3 lg:order-2 flex justify-center">
+            <img src="mobile.png" alt="Trusta App Security" class="w-full max-w-[300px] md:max-w-[380px] h-auto object-contain">
+        </div>
+
+        <div class="flex-1 order-2 lg:order-3 space-y-12">
+            <div class="flex gap-5">
+                <div class="flex-shrink-0">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-orange-400 flex items-center justify-center text-white text-[10px] font-bold text-center leading-tight shadow-md">
+                        Industry<br>first
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Card freeze</h3>
+                    <p class="text-gray-600 text-[15px] leading-relaxed max-w-sm">
+                        Instantly freeze your card in the app if it gets lost, stolen or you suspect fraud.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pl-[76px]">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Biometric login</h3>
+                <p class="text-gray-600 text-[15px] leading-relaxed max-w-sm">
+                    Switch on face or fingerprint ID to unlock your app and authorise payments.
+                </p>
+            </div>
+
+            <div class="flex gap-5">
+                <div class="flex-shrink-0">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-orange-400 flex items-center justify-center text-white text-[10px] font-bold text-center leading-tight shadow-md">
+                        Industry<br>first
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Extra security controls</h3>
+                    <p class="text-gray-600 text-[15px] leading-relaxed max-w-sm">
+                        Add an extra layer of protection when making large payments.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+<footer class="bg-[#111d2e] text-white pt-20 pb-10 px-6 lg:px-12">
+    <div class="max-w-[1400px] mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-20">
+            <div>
+                <h4 class="font-bold text-[17px] mb-6">Products</h4>
+                <ul class="space-y-4 text-gray-400 text-[15px]">
+                    <li><a href="#" class="hover:underline">Current accounts</a></li>
+                    <li><a href="#" class="hover:underline">Business accounts</a></li>
+                    <li><a href="#" class="hover:underline">Savings</a></li>
+                    <li><a href="#" class="hover:underline">Credit cards</a></li>
+                    <li><a href="#" class="hover:underline">Loans</a></li>
+                    <li><a href="#" class="hover:underline">Investments</a></li>
+                    <li><a href="#" class="hover:underline">Pensions</a></li>
+                    <li><a href="#" class="hover:underline">Home Insurance</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-[17px] mb-6">Company</h4>
+                <ul class="space-y-4 text-gray-400 text-[15px]">
+                    <li><a href="#" class="hover:underline">Careers</a></li>
+                    <li><a href="#" class="hover:underline">Press</a></li>
+                    <li><a href="#" class="hover:underline">Blog</a></li>
+                    <li><a href="#" class="hover:underline">Investor information</a></li>
+                    <li><a href="#" class="hover:underline">Helping everyone belong</a></li>
+                    <li><a href="#" class="hover:underline">Modern slavery statement</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-[17px] mb-6">Using Trusta</h4>
+                <ul class="space-y-4 text-gray-400 text-[15px]">
+                    <li><a href="login.html" class="hover:underline">Web app login</a></li>
+                    <li><a href="#" class="hover:underline">Accessibility</a></li>
+                    <li><a href="#" class="hover:underline">Life events</a></li>
+                    <li><a href="#" class="hover:underline">Terms and Conditions</a></li>
+                    <li><a href="#" class="hover:underline">Information about our services</a></li>
+                    <li><a href="#" class="hover:underline">Savings hub</a></li>
+                    <li><a href="#" class="hover:underline">Personal loan calculator</a></li>
+                    <li><a href="#" class="hover:underline">Currency Converter</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-[17px] mb-6">Help and security</h4>
+                <ul class="space-y-4 text-gray-400 text-[15px]">
+                    <li><a href="#" class="hover:underline">Help centre</a></li>
+                    <li><a href="#" class="hover:underline">FAQs</a></li>
+                    <li><a href="#" class="hover:underline">Fraud protection</a></li>
+                    <li><a href="#" class="hover:underline">Security at Trusta</a></li>
+                    <li><a href="#" class="hover:underline">Money worries</a></li>
+                    <li><a href="#" class="hover:underline">FSCS information</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-[17px] mb-6">Site and app information</h4>
+                <ul class="space-y-4 text-gray-400 text-[15px]">
+                    <li><a href="#" class="hover:underline">Privacy notice</a></li>
+                    <li><a href="#" class="hover:underline">Cookie notice</a></li>
+                    <li><a href="#" class="hover:underline">Browser support policy</a></li>
+                    <li><a href="#" class="hover:underline">Mobile operating system support policy</a></li>
+                    <li><a href="#" class="hover:underline">App performance</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="flex justify-center mb-16">
+            <button class="flex items-center gap-2 bg-gray-800/50 px-4 py-1.5 rounded-md text-[13px] font-bold border border-gray-700">
+                <span class="opacity-70">GB</span> United Kingdom | English
+            </button>
+        </div>
+
+        <div class="text-center mb-16">
+            <h1 class="text-[#ff5a5f] text-[15vw] lg:text-[220px] font-black tracking-tighter leading-none select-none">
+                trusta
+            </h1>
+        </div>
+
+        <div class="text-[11px] text-gray-500 max-w-5xl mx-auto text-center leading-relaxed mb-12">
+            Trusta Bank Limited is a company registered in England and Wales (No.09446231). Trusta Bank Limited is authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority. Our financial Services Register number is 730427. Our address is Broadwalk House, 5 Appold St, London EC2A 2AG.
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8 border-t border-gray-800 pt-10">
+            <div class="flex items-center gap-6">
+                <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin text-xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube text-xl"></i></a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="h-10"></a>
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-10"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Smartsupp Live Chat script -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '121c31f2e65b15894a480ce3370532bf5fb0667b';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
+
+    <script src="script.js"></script>
+</body>
+</html>

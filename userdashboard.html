@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Trusta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        :root {
+            --navy: #001f3f;
+            --navy-light: #003d7a;
+        }
+        body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .gradient-navy { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
+        .balance-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .crypto-card { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .hover-up { transition: all 0.3s; }
+        .hover-up:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .balance-hidden { filter: blur(10px); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-up { animation: slideUp 0.6s ease-out; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
+        .modal.active { display: flex; }
+        .crypto-icon { width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btc { background: linear-gradient(135deg, #f7931a 0%, #ff9800 100%); }
+        .eth { background: linear-gradient(135deg, #627eea 0%, #8a9ff5 100%); }
+        .usdt { background: linear-gradient(135deg, #26a17b 0%, #50d890 100%); }
+        .bnb { background: linear-gradient(135deg, #f3ba2f 0%, #ffd54f 100%); }
+        @media (max-width: 640px) {
+            .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e5e7eb; z-index: 100; padding: 0.75rem 0; }
+            .pb-nav { padding-bottom: 80px; }
+        }
+        .loading-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(255,255,255,0.95); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 9999;
+        }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-completed { background: #d1fae5; color: #065f46; }
+        .status-declined { background: #fee2e2; color: #991b1b; }
+        .blocked-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="text-center">
+            <i class="fas fa-spinner fa-spin text-5xl mb-4" style="color: var(--navy);"></i>
+            <p class="text-gray-600 font-semibold">Loading your dashboard...</p>
+        </div>
+    </div>
+
+    <!-- Blocked Account Overlay -->
+    <div id="blocked-overlay" class="blocked-overlay" style="display: none;">
+        <div class="glass rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
+            <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-red-100 flex items-center justify-center">
+                <i class="fas fa-ban text-4xl text-red-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Account Blocked</h2>
+            <p class="text-gray-600 mb-6">Your account has been temporarily blocked. Please contact support for assistance.</p>
+            <button onclick="logout()" class="px-6 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="hidden sm:block gradient-navy shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow">
+                    <i class="fas fa-shield-halved text-xl" style="color: var(--navy);"></i>
+                </div>
+                <div>
+                    <span class="text-white text-xl font-bold">Trusta</span>
+                    <p class="text-white text-xs opacity-75">Secure Banking</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative text-white p-2"><i class="fas fa-bell"></i><span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+                <div class="flex items-center space-x-2 bg-white bg-opacity-20 px-4 py-2 rounded-xl">
+                    <i class="fas fa-user-circle text-white"></i>
+                    <span class="text-white font-semibold" id="nav-username">User</span>
+                </div>
+                <button onclick="logout()" class="bg-white px-4 py-2 rounded-xl font-semibold text-sm" style="color: var(--navy);"><i class="fas fa-right-from-bracket mr-1"></i>Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="sm:hidden gradient-navy p-4 sticky top-0 z-50 shadow-lg">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                    <i class="fas fa-shield-halved text-xl" style="color: var(--navy);"></i>
+                </div>
+                <div>
+                    <span class="text-white font-bold">Trusta</span>
+                    <p class="text-white text-xs opacity-75" id="mobile-username">User</p>
+                </div>
+            </div>
+            <button class="relative text-white p-2"><i class="fas fa-bell text-xl"></i><span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="pb-nav max-w-7xl mx-auto px-4 py-6">
+        <div class="mb-6 slide-up">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Welcome, <span id="user-name">User</span>! 👋</h1>
+            <p class="text-gray-600 text-sm">Here's your financial overview</p>
+        </div>
+
+        <!-- Balance Cards -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-6">
+            <div class="balance-card rounded-3xl shadow-xl p-6 hover-up slide-up text-white">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <p class="text-sm opacity-90 mb-2">Total Balance</p>
+                        <div class="flex items-center space-x-3">
+                            <h2 class="text-4xl font-bold"><span id="usd-balance">$0.00</span></h2>
+                            <button onclick="toggleBalance('usd')"><i class="fas fa-eye" id="usd-eye"></i></button>
+                        </div>
+                        <p class="text-xs opacity-75 mt-2">Available funds</p>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white bg-opacity-20">
+                        <i class="fas fa-wallet text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crypto-card rounded-3xl shadow-xl p-6 hover-up slide-up text-white" style="animation-delay: 0.1s;">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <p class="text-sm opacity-90 mb-2">Crypto Portfolio</p>
+                        <div class="flex items-center space-x-3">
+                            <h2 class="text-4xl font-bold"><span id="crypto-balance">$0.00</span></h2>
+                            <button onclick="toggleBalance('crypto')"><i class="fas fa-eye" id="crypto-eye"></i></button>
+                        </div>
+                        <p class="text-xs opacity-75 mt-2">Total crypto value</p>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white bg-opacity-20">
+                        <i class="fas fa-coins text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="glass rounded-3xl shadow-xl p-4 mb-6 slide-up" style="animation-delay: 0.2s;">
+            <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-bolt mr-2" style="color: var(--navy);"></i>Quick Actions</h3>
+            <div class="grid grid-cols-3 gap-3">
+                <button onclick="openModal('convert-modal')" class="flex flex-col items-center p-4 rounded-2xl bg-white shadow hover:shadow-lg transition">
+                    <div class="w-14 h-14 rounded-2xl mb-2 flex items-center justify-center gradient-navy">
+                        <i class="fas fa-repeat text-xl text-white"></i>
+                    </div>
+                    <span class="text-xs font-semibold">Convert</span>
+                </button>
+                <button onclick="openModal('transfer-modal')" class="flex flex-col items-center p-4 rounded-2xl bg-white shadow hover:shadow-lg transition">
+                    <div class="w-14 h-14 rounded-2xl mb-2 flex items-center justify-center gradient-navy">
+                        <i class="fas fa-paper-plane text-xl text-white"></i>
+                    </div>
+                    <span class="text-xs font-semibold">Transfer</span>
+                </button>
+                <button onclick="openModal('transactions-modal')" class="flex flex-col items-center p-4 rounded-2xl bg-white shadow hover:shadow-lg transition">
+                    <div class="w-14 h-14 rounded-2xl mb-2 flex items-center justify-center gradient-navy">
+                        <i class="fas fa-clock-rotate-left text-xl text-white"></i>
+                    </div>
+                    <span class="text-xs font-semibold">History</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <!-- Crypto -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="glass rounded-3xl shadow-xl p-4 sm:p-6 slide-up" style="animation-delay: 0.3s;">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-chart-pie mr-2" style="color: var(--navy);"></i>Crypto Assets</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-4 rounded-2xl bg-gray-50">
+                            <div class="flex items-center space-x-4">
+                                <div class="crypto-icon btc"><i class="fab fa-bitcoin"></i></div>
+                                <div><p class="font-bold">Bitcoin</p><p class="text-sm text-gray-500"><span id="btc-amount">0.00000000</span> BTC</p></div>
+                            </div>
+                            <p class="font-bold" id="btc-value">$0.00</p>
+                        </div>
+                        <div class="flex items-center justify-between p-4 rounded-2xl bg-gray-50">
+                            <div class="flex items-center space-x-4">
+                                <div class="crypto-icon eth"><i class="fab fa-ethereum"></i></div>
+                                <div><p class="font-bold">Ethereum</p><p class="text-sm text-gray-500"><span id="eth-amount">0.00000000</span> ETH</p></div>
+                            </div>
+                            <p class="font-bold" id="eth-value">$0.00</p>
+                        </div>
+                        <div class="flex items-center justify-between p-4 rounded-2xl bg-gray-50">
+                            <div class="flex items-center space-x-4">
+                                <div class="crypto-icon usdt">₮</div>
+                                <div><p class="font-bold">Tether</p><p class="text-sm text-gray-500"><span id="usdt-amount">0.00000000</span> USDT</p></div>
+                            </div>
+                            <p class="font-bold" id="usdt-value">$0.00</p>
+                        </div>
+                        <div class="flex items-center justify-between p-4 rounded-2xl bg-gray-50">
+                            <div class="flex items-center space-x-4">
+                                <div class="crypto-icon bnb">B</div>
+                                <div><p class="font-bold">Binance Coin</p><p class="text-sm text-gray-500"><span id="bnb-amount">0.00000000</span> BNB</p></div>
+                            </div>
+                            <p class="font-bold" id="bnb-value">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass rounded-3xl shadow-xl p-6 slide-up" style="animation-delay: 0.5s;">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-clock mr-2" style="color: var(--navy);"></i>Recent Activity</h3>
+                    <div id="recent-activity-container">
+                        <div class="text-center py-12 text-gray-500">
+                            <i class="fas fa-inbox text-4xl opacity-50 mb-3"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="glass rounded-3xl shadow-xl p-6 slide-up" style="animation-delay: 0.4s;">
+                <h3 class="text-xl font-bold text-gray-800 mb-6"><i class="fas fa-user-circle mr-2" style="color: var(--navy);"></i>Profile</h3>
+                <div class="space-y-4">
+                    <div class="p-4 rounded-2xl bg-gray-50">
+                        <p class="text-xs text-gray-500 font-semibold mb-1"><i class="fas fa-user mr-2" style="color: var(--navy);"></i>Full Name</p>
+                        <p class="font-bold" id="profile-fullname">Loading...</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-gray-50">
+                        <p class="text-xs text-gray-500 font-semibold mb-1"><i class="fas fa-at mr-2" style="color: var(--navy);"></i>Username</p>
+                        <p class="font-bold" id="profile-username">Loading...</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-gray-50">
+                        <p class="text-xs text-gray-500 font-semibold mb-1"><i class="fas fa-hashtag mr-2" style="color: var(--navy);"></i>Account Number</p>
+                        <p class="font-bold text-lg tracking-wider" id="profile-account">Loading...</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-gray-50">
+                        <p class="text-xs text-gray-500 font-semibold mb-1"><i class="fas fa-envelope mr-2" style="color: var(--navy);"></i>Email</p>
+                        <p class="font-bold text-sm break-all" id="profile-email">Loading...</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-gray-50">
+                        <p class="text-xs text-gray-500 font-semibold mb-1"><i class="fas fa-phone mr-2" style="color: var(--navy);"></i>Phone</p>
+                        <p class="font-bold" id="profile-phone">Loading...</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-gray-50">
+                        <p class="text-xs text-gray-500 font-semibold mb-1"><i class="fas fa-globe mr-2" style="color: var(--navy);"></i>Country</p>
+                        <p class="font-bold" id="profile-country">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav sm:hidden">
+        <div class="grid grid-cols-5 gap-1">
+            <button class="flex flex-col items-center py-2" style="color: var(--navy);"><i class="fas fa-home text-xl mb-1"></i><span class="text-xs font-semibold">Home</span></button>
+            <button onclick="openModal('convert-modal')" class="flex flex-col items-center py-2 text-gray-400"><i class="fas fa-repeat text-xl mb-1"></i><span class="text-xs">Convert</span></button>
+            <button onclick="openModal('transfer-modal')" class="flex flex-col items-center py-2 text-gray-400"><i class="fas fa-paper-plane text-xl mb-1"></i><span class="text-xs">Transfer</span></button>
+            <button onclick="openModal('transactions-modal')" class="flex flex-col items-center py-2 text-gray-400"><i class="fas fa-clock-rotate-left text-xl mb-1"></i><span class="text-xs">History</span></button>
+            <button onclick="logout()" class="flex flex-col items-center py-2 text-gray-400"><i class="fas fa-right-from-bracket text-xl mb-1"></i><span class="text-xs">Logout</span></button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="convert-modal" class="modal">
+        <div class="glass rounded-3xl shadow-2xl p-6 max-w-md w-full">
+            <div class="flex justify-between mb-6">
+                <h3 class="text-2xl font-bold"><i class="fas fa-repeat mr-2" style="color: var(--navy);"></i>Convert</h3>
+                <button onclick="closeModal('convert-modal')" class="text-gray-400"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div><label class="block text-sm font-bold mb-2">From</label><select class="w-full px-4 py-3 border-2 rounded-2xl"><option>Bitcoin (BTC)</option><option>Ethereum (ETH)</option></select></div>
+                <div><label class="block text-sm font-bold mb-2">Amount</label><input type="number" step="0.00000001" class="w-full px-4 py-3 border-2 rounded-2xl"></div>
+                <button class="w-full text-white py-3 rounded-2xl gradient-navy font-semibold">Convert Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Transfer Modal -->
+    <div id="transfer-modal" class="modal">
+        <div class="glass rounded-3xl shadow-2xl p-6 max-w-md w-full">
+            <div class="flex justify-between mb-6">
+                <h3 class="text-2xl font-bold"><i class="fas fa-paper-plane mr-2" style="color: var(--navy);"></i>Transfer</h3>
+                <button onclick="closeModal('transfer-modal')" class="text-gray-400"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="transfer-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2">Currency</label>
+                    <select id="transfer-currency" class="w-full px-4 py-3 border-2 rounded-2xl" required>
+                        <option value="usd">USD</option>
+                        <option value="btc">Bitcoin (BTC)</option>
+                        <option value="eth">Ethereum (ETH)</option>
+                        <option value="usdt">Tether (USDT)</option>
+                        <option value="bnb">Binance Coin (BNB)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Recipient Account Number</label>
+                    <input type="text" id="transfer-recipient" placeholder="Enter account number" class="w-full px-4 py-3 border-2 rounded-2xl" required>
+                    <p class="text-xs text-gray-500 mt-1">Enter the recipient's account number</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Amount</label>
+                    <input type="number" id="transfer-amount" step="0.00000001" placeholder="0.00" class="w-full px-4 py-3 border-2 rounded-2xl" required>
+                    <p class="text-xs text-gray-500 mt-1">Available: <span id="available-balance">0.00</span></p>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Note (Optional)</label>
+                    <textarea id="transfer-note" rows="2" placeholder="Add a note..." class="w-full px-4 py-3 border-2 rounded-2xl"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">PIN</label>
+                    <input type="password" id="transfer-pin" maxlength="4" placeholder="Enter your 4-digit PIN" class="w-full px-4 py-3 border-2 rounded-2xl" required>
+                </div>
+                <button type="submit" class="w-full text-white py-3 rounded-2xl gradient-navy font-semibold hover-up">
+                    <i class="fas fa-paper-plane mr-2"></i>Send Transfer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Enhanced Transactions Modal -->
+    <div id="transactions-modal" class="modal">
+        <div class="glass rounded-3xl shadow-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between mb-6">
+                <h3 class="text-2xl font-bold">Transaction History</h3>
+                <button onclick="closeModal('transactions-modal')" class="text-gray-400"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div id="transactions-container">
+                <div class="text-center py-12 text-gray-500">
+                    <i class="fas fa-spinner fa-spin text-3xl mb-3"></i>
+                    <p>Loading transactions...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        console.log('Dashboard loaded');
+        
+        const balanceStates = {usd: false, crypto: false};
+        let currentUser = null;
+        let currentUserData = null;
+        
+        function toggleBalance(type) {
+            balanceStates[type] = !balanceStates[type];
+            const el = document.getElementById(`${type}-balance`);
+            const eye = document.getElementById(`${type}-eye`);
+            if (balanceStates[type]) { 
+                el.classList.add('balance-hidden'); 
+                eye.classList.replace('fa-eye', 'fa-eye-slash'); 
+            } else { 
+                el.classList.remove('balance-hidden'); 
+                eye.classList.replace('fa-eye-slash', 'fa-eye'); 
+            }
+        }
+        
+        function openModal(id) { 
+            document.getElementById(id).classList.add('active'); 
+            if (id === 'transfer-modal') {
+                updateAvailableBalance();
+            }
+            if (id === 'transactions-modal') {
+                loadTransactions();
+            }
+        }
+        
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('active'); 
+        }
+        
+        document.querySelectorAll('.modal').forEach(m => {
+            m.addEventListener('click', e => { 
+                if(e.target === m) m.classList.remove('active'); 
+            });
+        });
+        
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                try { 
+                    await auth.signOut(); 
+                    window.location.href = 'login.html'; 
+                } catch (e) { 
+                    console.error('Logout error:', e);
+                    alert('Error logging out'); 
+                }
+            }
+        }
+
+        // Update available balance based on selected currency
+        function updateAvailableBalance() {
+            const currency = document.getElementById('transfer-currency').value;
+            let balance = 0;
+            
+            if (currentUserData) {
+                if (currency === 'usd') {
+                    balance = currentUserData.usdBalance || 0;
+                    document.getElementById('available-balance').textContent = `$${balance.toFixed(2)}`;
+                } else {
+                    const crypto = currentUserData.cryptoHoldings || {};
+                    balance = crypto[currency] || 0;
+                    document.getElementById('available-balance').textContent = `${balance.toFixed(8)} ${currency.toUpperCase()}`;
+                }
+            }
+        }
+
+        document.getElementById('transfer-currency')?.addEventListener('change', updateAvailableBalance);
+
+        // Handle transfer form submission
+        document.getElementById('transfer-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentUser || !currentUserData) {
+                alert('User data not loaded. Please refresh the page.');
+                return;
+            }
+
+            // Check if account is blocked
+            if (currentUserData.blocked) {
+                alert('Your account is blocked. Please contact support.');
+                return;
+            }
+
+            const currency = document.getElementById('transfer-currency').value;
+            const recipient = document.getElementById('transfer-recipient').value.trim();
+            const amount = parseFloat(document.getElementById('transfer-amount').value);
+            const note = document.getElementById('transfer-note').value.trim();
+            const pin = document.getElementById('transfer-pin').value;
+
+            // Validate inputs
+            if (!recipient) {
+                alert('Please enter recipient account number');
+                return;
+            }
+
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            if (!pin || pin.length !== 4) {
+                alert('Please enter a valid 4-digit PIN');
+                return;
+            }
+
+            // Check if user has sufficient balance
+            let currentBalance = 0;
+            if (currency === 'usd') {
+                currentBalance = currentUserData.usdBalance || 0;
+            } else {
+                const crypto = currentUserData.cryptoHoldings || {};
+                currentBalance = crypto[currency] || 0;
+            }
+
+            if (amount > currentBalance) {
+                alert('Insufficient balance');
+                return;
+            }
+
+            // Verify PIN (basic check - in production, this should be more secure)
+           const userPin = currentUserData.transactionPin || '0000';
+            if (pin !== userPin) {
+                alert('Invalid PIN');
+                return;
+            }
+
+            try {
+                // Create transaction record
+                const transactionId = database.ref('transactions').push().key;
+                const transactionData = {
+                    id: transactionId,
+                    senderId: currentUser.uid,
+                    senderName: `${currentUserData.firstName} ${currentUserData.lastName}`,
+                    senderAccount: currentUserData.accountNumber,
+                    recipientAccount: recipient,
+                    currency: currency,
+                    amount: amount,
+                    note: note,
+                    status: 'pending',
+                    type: 'transfer',
+                    createdAt: Date.now(),
+                    timestamp: new Date().toISOString()
+                };
+
+                // Save transaction
+                await database.ref('transactions/' + transactionId).set(transactionData);
+
+                // Also save to user's transaction history
+                await database.ref('users/' + currentUser.uid + '/transactions/' + transactionId).set(transactionData);
+
+                alert('Transfer submitted successfully! Your transaction is pending admin approval.');
+                
+                // Reset form and close modal
+                document.getElementById('transfer-form').reset();
+                closeModal('transfer-modal');
+                
+                // Reload transactions
+                loadTransactions();
+                loadRecentActivity();
+
+            } catch (error) {
+                console.error('Transfer error:', error);
+                alert('Error processing transfer. Please try again.');
+            }
+        });
+
+        // Load transactions
+        async function loadTransactions() {
+            const container = document.getElementById('transactions-container');
+            container.innerHTML = '<div class="text-center py-12 text-gray-500"><i class="fas fa-spinner fa-spin text-3xl mb-3"></i><p>Loading transactions...</p></div>';
+
+            try {
+                const snapshot = await database.ref('users/' + currentUser.uid + '/transactions').once('value');
+                const transactions = snapshot.val();
+
+                if (!transactions) {
+                    container.innerHTML = '<div class="text-center py-12 text-gray-500"><i class="fas fa-inbox text-4xl opacity-50 mb-3"></i><p>No transactions yet</p></div>';
+                    return;
+                }
+
+                // Convert to array and sort by date
+                const txArray = Object.values(transactions).sort((a, b) => b.createdAt - a.createdAt);
+
+                let html = '<div class="space-y-3">';
+                txArray.forEach(tx => {
+                    const statusClass = `status-${tx.status}`;
+                    const icon = tx.type === 'transfer' ? 'fa-paper-plane' : 'fa-arrow-down';
+                    const date = new Date(tx.createdAt).toLocaleString();
+                    
+                    html += `
+                        <div class="p-4 rounded-2xl bg-gray-50">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                        <i class="fas ${icon} text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-800">${tx.type === 'transfer' ? 'Transfer' : 'Received'}</p>
+                                        <p class="text-xs text-gray-500">${date}</p>
+                                    </div>
+                                </div>
+                                <span class="${statusClass} px-3 py-1 rounded-full text-xs font-semibold uppercase">
+                                    ${tx.status}
+                                </span>
+                            </div>
+                            <div class="ml-13 space-y-1">
+                                <p class="text-sm text-gray-600"><span class="font-semibold">Amount:</span> ${tx.amount.toFixed(8)} ${tx.currency.toUpperCase()}</p>
+                                ${tx.recipientAccount ? `<p class="text-sm text-gray-600"><span class="font-semibold">To:</span> ${tx.recipientAccount}</p>` : ''}
+                                ${tx.note ? `<p class="text-sm text-gray-600"><span class="font-semibold">Note:</span> ${tx.note}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading transactions:', error);
+                container.innerHTML = '<div class="text-center py-12 text-red-500">Error loading transactions</div>';
+            }
+        }
+
+        // Load recent activity
+        async function loadRecentActivity() {
+            try {
+                const snapshot = await database.ref('users/' + currentUser.uid + '/transactions')
+                    .orderByChild('createdAt')
+                    .limitToLast(5)
+                    .once('value');
+                
+                const transactions = snapshot.val();
+                const container = document.getElementById('recent-activity-container');
+
+                if (!transactions) {
+                    container.innerHTML = '<div class="text-center py-12 text-gray-500"><i class="fas fa-inbox text-4xl opacity-50 mb-3"></i><p>No recent activity</p></div>';
+                    return;
+                }
+
+                const txArray = Object.values(transactions).sort((a, b) => b.createdAt - a.createdAt);
+
+                let html = '<div class="space-y-3">';
+                txArray.slice(0, 3).forEach(tx => {
+                    const statusClass = `status-${tx.status}`;
+                    const icon = tx.type === 'transfer' ? 'fa-paper-plane' : 'fa-arrow-down';
+                    const timeAgo = getTimeAgo(tx.createdAt);
+                    
+                    html += `
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                    <i class="fas ${icon} text-indigo-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-sm text-gray-800">${tx.type === 'transfer' ? 'Sent' : 'Received'} ${tx.amount.toFixed(4)} ${tx.currency.toUpperCase()}</p>
+                                    <p class="text-xs text-gray-500">${timeAgo}</p>
+                                </div>
+                            </div>
+                            <span class="${statusClass} px-2 py-1 rounded-full text-xs font-semibold uppercase">
+                                ${tx.status}
+                            </span>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading recent activity:', error);
+            }
+        }
+
+        // Helper function to get time ago
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+            return `${Math.floor(seconds / 86400)} days ago`;
+        }
+
+        // Listen for transaction updates
+        function listenForTransactionUpdates() {
+            if (!currentUser) return;
+
+            database.ref('users/' + currentUser.uid + '/transactions').on('value', (snapshot) => {
+                const transactions = snapshot.val();
+                if (!transactions) return;
+
+                // Check for approved transactions and update balances
+                Object.values(transactions).forEach(async (tx) => {
+                    if (tx.status === 'completed' && !tx.balanceUpdated) {
+                        // Mark as updated
+                        await database.ref('users/' + currentUser.uid + '/transactions/' + tx.id).update({
+                            balanceUpdated: true
+                        });
+
+                        // Reload user data to reflect new balance
+                        const userSnapshot = await database.ref('users/' + currentUser.uid).once('value');
+                        currentUserData = userSnapshot.val();
+                        updateBalanceDisplay();
+                        
+                        // Show notification
+                        showNotification('Transaction Approved', `Your transfer of ${tx.amount} ${tx.currency.toUpperCase()} has been approved.`);
+                    } else if (tx.status === 'declined' && !tx.notified) {
+                        // Mark as notified
+                        await database.ref('users/' + currentUser.uid + '/transactions/' + tx.id).update({
+                            notified: true
+                        });
+                        
+                        showNotification('Transaction Declined', `Your transfer of ${tx.amount} ${tx.currency.toUpperCase()} was declined.`);
+                    }
+                });
+
+                // Update UI
+                loadRecentActivity();
+            });
+        }
+
+        // Show notification
+        function showNotification(title, message) {
+            // Simple alert notification - in production, use better notification system
+            if (Notification.permission === 'granted') {
+                new Notification(title, { body: message });
+            } else {
+                alert(`${title}: ${message}`);
+            }
+        }
+
+        // Update balance display
+        function updateBalanceDisplay() {
+            if (!currentUserData) return;
+
+            const usd = currentUserData.usdBalance || 0;
+            const crypto = currentUserData.cryptoHoldings || {btc:0, eth:0, usdt:0, bnb:0};
+            
+            document.getElementById('usd-balance').textContent = `${usd.toFixed(2)}`;
+            document.getElementById('btc-amount').textContent = (crypto.btc || 0).toFixed(8);
+            document.getElementById('eth-amount').textContent = (crypto.eth || 0).toFixed(8);
+            document.getElementById('usdt-amount').textContent = (crypto.usdt || 0).toFixed(8);
+            document.getElementById('bnb-amount').textContent = (crypto.bnb || 0).toFixed(8);
+            
+            // Calculate crypto values
+            const prices = {btc:45000, eth:3000, usdt:1, bnb:400};
+            const vals = {
+                btc: (crypto.btc || 0) * prices.btc, 
+                eth: (crypto.eth || 0) * prices.eth, 
+                usdt: (crypto.usdt || 0) * prices.usdt, 
+                bnb: (crypto.bnb || 0) * prices.bnb
+            };
+            
+            document.getElementById('btc-value').textContent = `${vals.btc.toFixed(2)}`;
+            document.getElementById('eth-value').textContent = `${vals.eth.toFixed(2)}`;
+            document.getElementById('usdt-value').textContent = `${vals.usdt.toFixed(2)}`;
+            document.getElementById('bnb-value').textContent = `${vals.bnb.toFixed(2)}`;
+            document.getElementById('crypto-balance').textContent = `${(vals.btc + vals.eth + vals.usdt + vals.bnb).toFixed(2)}`;
+        }
+        
+        // Main authentication and data loading
+        auth.onAuthStateChanged(async (user) => {
+            console.log('Auth state changed, user:', user);
+            
+            if (!user) { 
+                console.log('No user logged in, redirecting to login');
+                window.location.href = 'login.html'; 
+                return; 
+            }
+            
+            currentUser = user;
+            console.log('User UID:', user.uid);
+            
+            try {
+                document.getElementById('loading-overlay').style.display = 'flex';
+                
+                const snap = await database.ref('users/' + user.uid).once('value');
+                const data = snap.val();
+                currentUserData = data;
+                
+                console.log('Database data retrieved:', data);
+                
+                if (data) {
+                    // Check if account is blocked
+                    if (data.blocked) {
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        document.getElementById('blocked-overlay').style.display = 'flex';
+                        return;
+                    }
+
+                    // Extract user information
+                    const firstName = data.firstName || 'User';
+                    const lastName = data.lastName || '';
+                    const middleName = data.middleName || '';
+                    const username = data.username || user.email.split('@')[0];
+                    const fullName = middleName 
+                        ? `${firstName} ${middleName} ${lastName}`.trim()
+                        : `${firstName} ${lastName}`.trim();
+                    const accountNumber = data.accountNumber || 'Not Available';
+                    const email = data.email || user.email;
+                    const phone = data.phone || 'Not Provided';
+                    const country = data.country || 'Not Provided';
+                    
+                    // Update all UI elements
+                    document.getElementById('user-name').textContent = firstName;
+                    document.getElementById('nav-username').textContent = username;
+                    document.getElementById('mobile-username').textContent = username;
+                    document.getElementById('profile-fullname').textContent = fullName;
+                    document.getElementById('profile-username').textContent = username;
+                    document.getElementById('profile-account').textContent = accountNumber;
+                    document.getElementById('profile-email').textContent = email;
+                    document.getElementById('profile-phone').textContent = phone;
+                    document.getElementById('profile-country').textContent = country;
+                    
+                    // Update balances
+                    updateBalanceDisplay();
+                    
+                    // Load recent activity
+                    loadRecentActivity();
+                    
+                    // Listen for transaction updates
+                    listenForTransactionUpdates();
+                    
+                    console.log('Dashboard data loaded successfully');
+                    
+                } else {
+                    console.error('ERROR: No user data found in database');
+                    alert('Warning: User profile data not found. Please contact support.');
+                }
+                
+                document.getElementById('loading-overlay').style.display = 'none';
+                
+            } catch(e) { 
+                console.error('Error loading dashboard data:', e);
+                document.getElementById('loading-overlay').style.display = 'none';
+                alert('Error loading your data. Please try refreshing the page.');
+            }
+        });
+
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    </script>
+
+    <!-- Smartsupp Live Chat script -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '121c31f2e65b15894a480ce3370532bf5fb0667b';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
+</body>
+</html>
