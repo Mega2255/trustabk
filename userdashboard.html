@@ -323,6 +323,43 @@
                     <p class="text-xs text-gray-500 mt-1">Enter the recipient's account number</p>
                 </div>
                 <div>
+                    <label class="block text-sm font-bold mb-2">Bank Name</label>
+                    <select id="transfer-bank" class="w-full px-4 py-3 border-2 rounded-2xl" required>
+                        <option value="">Select Bank</option>
+                        <optgroup label="Canada">
+                            <option value="Royal Bank of Canada (RBC)">Royal Bank of Canada (RBC)</option>
+                            <option value="Toronto-Dominion Bank (TD)">Toronto-Dominion Bank (TD)</option>
+                            <option value="Bank of Nova Scotia (Scotiabank)">Bank of Nova Scotia (Scotiabank)</option>
+                            <option value="Bank of Montreal (BMO)">Bank of Montreal (BMO)</option>
+                            <option value="Canadian Imperial Bank of Commerce (CIBC)">Canadian Imperial Bank of Commerce (CIBC)</option>
+                        </optgroup>
+                        <optgroup label="USA">
+                            <option value="JPMorgan Chase">JPMorgan Chase</option>
+                            <option value="Bank of America">Bank of America</option>
+                            <option value="Wells Fargo">Wells Fargo</option>
+                            <option value="Citibank">Citibank</option>
+                            <option value="U.S. Bank">U.S. Bank</option>
+                            <option value="PNC Bank">PNC Bank</option>
+                            <option value="Capital One">Capital One</option>
+                            <option value="Truist Bank">Truist Bank</option>
+                            <option value="TD Bank (USA)">TD Bank (USA)</option>
+                            <option value="Regions Bank">Regions Bank</option>
+                        </optgroup>
+                        <optgroup label="France">
+                            <option value="BNP Paribas">BNP Paribas</option>
+                            <option value="Crédit Agricole">Crédit Agricole</option>
+                            <option value="Société Générale">Société Générale</option>
+                            <option value="Crédit Mutuel">Crédit Mutuel</option>
+                            <option value="La Banque Postale">La Banque Postale</option>
+                            <option value="HSBC France">HSBC France</option>
+                            <option value="Boursorama Banque">Boursorama Banque</option>
+                            <option value="AXA Banque">AXA Banque</option>
+                            <option value="ING France">ING France</option>
+                        </optgroup>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">Select the recipient's bank</p>
+                </div>
+                <div>
                     <label class="block text-sm font-bold mb-2">Amount</label>
                     <input type="number" id="transfer-amount" step="0.00000001" placeholder="0.00" class="w-full px-4 py-3 border-2 rounded-2xl" required>
                     <p class="text-xs text-gray-500 mt-1">Available: <span id="available-balance">0.00</span></p>
